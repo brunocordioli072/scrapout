@@ -1,3 +1,4 @@
+const axios = require('axios');
 const cheerio = require('cheerio');
 const puppeteer = require('puppeteer');
 
@@ -8,49 +9,70 @@ let createPage = async (page, url) => {
     global.page = page;
 }
 
-async function getGameInfoByUrl(url) {
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
-    await createPage(page, url);
-    let html = await page.content();
-    const $ = cheerio.load(html);
-    let gameInfo = {}
-    $('li[class="list-info-item"] > span').each(function () {
-        let data = $(this).contents().text();
-        let key = data.substring(0, data.length - 1)
-        console.log(key)
-        if (!key == "Title") {
-            let title = $('li[class="list-info-item"] > #text').contents().text();
-            console.log('gamer'+ title)
-            gameInfo.title = title;
-        }
-    });
-    browser.close()
-    console.log(gameInfo)
-    return gameInfo;
-}
-
-async function getTop10GamesLinks() {
+async function getDataByUrl(url) {
     try {
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
         await createPage(page, url);
         let html = await page.content();
         const $ = cheerio.load(html);
-        const top10GameLinks = [];
-        $('ol[class="topnews"] > li > a').each(function () {
-            let link = $(this).attr('href')
-            top10GameLinks.push(link)
+        let data = [];
+        $('li[class="list-info-item"]').each(function () {
+            let content = $(this).contents().text();
+            data.push(content);
         });
-        console.log("- LINKS GOT")
-        browser.close()
-        return top10GameLinks;
+        browser.close();
+        return data;
     } catch (err) {
-        throw new err
+        console.log(err)
+    }
+}
+
+async function getByUrl(url, position) {
+    try {
+        let game = {};
+        let data = await getDataByUrl(url);
+        game.position = position;
+        data.forEach(element => {
+            if (element.includes('Title')) game.title = element.substring(7);
+            if (element.includes('Genre')) game.genre = element.substring(7);
+            if (element.includes('Release year')) game.releaseYear = element.substring(14);
+            if (element.includes('Steam link')) game.steamLink = element.substring(11);
+            if (element.includes('Version')) game.version = element.substring(14);
+            if (element.includes('Releaser')) game.releaser = element.substring(15);
+        });
+        return game;
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+async function getTop10Links() {
+    try {
+        const browser = await puppeteer.launch();
+        const page = await browser.newPage();
+        await createPage(page, url);
+        let html = await page.content();
+        const $ = cheerio.load(html);
+        const top10Links = [];
+
+        let count = 1;
+        $('ol[class="topnews"] > li > a').each(function () {
+            let game = {};
+            game.link = $(this).attr('href');
+            game.position = count;
+            count++
+            top10Links.push(game);
+        });
+        console.log("- LINKS GOT");
+        browser.close();
+        return top10Links;
+    } catch (err) {
+        console.log(err);
     }
 }
 
 module.exports = {
-    getTop10GamesLinks,
-    getGameInfoByUrl
+    getTop10Links,
+    getByUrl
 }
