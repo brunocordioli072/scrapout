@@ -1,12 +1,13 @@
 const skidrow = require('./core/skidrow');
 
 (async () => {
-    let gamesData = await skidrow.getTop10Links();
-    let games = []
-    for (let index = 0; index < gamesData.length; index++) {
-        let game = await skidrow.getByUrl(gamesData[index].link, gamesData[index].position);
-        games.push(game)
-        console.log(games)
+    let links = await skidrow.getTop10Links();
+    let gamesInfo = []
+    for (let index = 0; index < links.length; index++) {
+        let data = await skidrow.getDataByUrl(links[index]);
+        let info = await skidrow.convertDataToInfo(data);
+        gamesInfo.push(info)
+        console.log(info)
     }
-    console.log(games)
+    console.log(gamesInfo)
 })()
