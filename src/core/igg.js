@@ -9,30 +9,36 @@ module.exports = {
 }
 
 async function getTop8Links() {
-    let html = await utils.axios.getHTML(URL);
-    const $ = cheerio.load(html);
-    const links = [];
+    try {
+        let html = await utils.axios.getHTML(URL);
+        const $ = cheerio.load(html);
+        const links = [];
 
-    
-
-    $('div[id="wk-grid733"] > div > div > figure > div > div > div > div > a').each(function () {
-        link = $(this).attr('href');
-        links.push(link);
-    });
-    return links;
+        $('div > div > div > figure > div > div > div > div > a').each(function () {
+            link = $(this).attr('href');
+            links.push(link);
+        });
+        return links;
+    } catch (err) {
+        console.log(err);
+    }
 }
 
 async function getDataByUrl(url) {
-    let html = await utils.axios.getHTML(url);
-    const $ = cheerio.load(html);
-    let data = [];
-    let title = 'Title: ' + $('h1').contents().text();
-    data.push(title);
+    try {
+        let html = await utils.axios.getHTML(url);
+        const $ = cheerio.load(html);
+        let data = [];
+        let title = 'Title: ' + $('h1').contents().text();
+        data.push(title);
 
-    $('p').each(function () {
-        data.push($(this).contents().text());
-    });
-    return data;
+        $('p').each(function () {
+            data.push($(this).contents().text());
+        });
+        return data;
+    } catch (err) {
+        console.log(err);
+    }
 }
 
 async function convertDataToInfo(data) {
