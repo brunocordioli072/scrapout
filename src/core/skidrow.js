@@ -1,10 +1,16 @@
-const DomParser = require('dom-parser');
 const cheerio = require('cheerio');
 const utils = require('../utils')
-const url = 'https://skidrowgamereloaded.co';
+const URL = 'https://skidrowgamereloaded.co';
+
+module.exports = {
+    getTop10Links,
+    convertDataToInfo,
+    getDataByUrl
+}
+
 async function getTop10Links() {
     try {
-        let html = await utils.axios.getHTML(url)
+        let html = await utils.axios.getHTML(URL)
         const $ = cheerio.load(html);
         const links = [];
 
@@ -12,7 +18,6 @@ async function getTop10Links() {
             link = $(this).attr('href');
             links.push(link);
         });
-        console.log("- LINKS GOT");
         return links;
     } catch (err) {
         console.log(err);
@@ -50,10 +55,4 @@ async function convertDataToInfo(data) {
     } catch (err) {
         console.log(err);
     }
-}
-
-module.exports = {
-    getTop10Links,
-    convertDataToInfo,
-    getDataByUrl
 }

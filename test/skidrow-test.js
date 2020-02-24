@@ -20,6 +20,7 @@ describe('- skidrow', async () => {
     skidrow.getDataByUrl(url)
       .then((data) => {
         expect(data).to.be.an('array');
+        expect(data).not.null;
         expect(data.length).to.equal(11);
         done();
       }).catch((e) => {

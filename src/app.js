@@ -1,4 +1,5 @@
 const skidrow = require('./core/skidrow');
+const igg = require('./core/igg');
 
 (async () => {
     /* let links = await skidrow.getTop10Links();
@@ -10,6 +11,10 @@ const skidrow = require('./core/skidrow');
         console.log(info)
     }
     console.log(gamesInfo) */
-    let a = await skidrow.getTop10Links();
-    console.log(a)
+    /* let a = await skidrow.getDataByUrl('https://skidrowgamereloaded.co/17-factorio-game.html')
+    console.log(a) */
+    let data = await igg.getDataByUrl('https://igg-games.com/senren%ef%bc%8abanka-free-download.html');
+    console.log(data)
+    /* let info = await igg.convertDataToInfo(data);
+    console.log(info) */
 })()
