@@ -1,5 +1,5 @@
 var expect = require('chai').expect;
-const igg = require('../src/core/igg')
+const igg = require('../../src/core/igg')
 
 describe('- igg', async () => {
     it('getTop8Links', function (done) {

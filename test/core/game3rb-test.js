@@ -1,5 +1,5 @@
 var expect = require('chai').expect;
-const game3rb = require('../src/core/game3rb')
+const game3rb = require('../../src/core/game3rb')
 
 describe('- game3rb', async () => {
     it('getTop10Links', function (done) {

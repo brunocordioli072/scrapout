@@ -9,8 +9,7 @@ async function getHTML(url) {
         let res = await axios.get(url);
         return res.data;
     } catch (err) {
-        if (errorHandler) errorHandler(err);
-        else throw err;
+        console.log(err);
     }
 }
 

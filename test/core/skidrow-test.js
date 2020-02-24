@@ -1,6 +1,6 @@
 
 var expect = require('chai').expect;
-const skidrow = require('../src/core/skidrow')
+const skidrow = require('../../src/core/skidrow')
 
 describe('- skidrow', async () => {
 
