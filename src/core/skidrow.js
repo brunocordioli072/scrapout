@@ -1,20 +1,10 @@
-const axios = require('axios');
+const DomParser = require('dom-parser');
 const cheerio = require('cheerio');
-const puppeteer = require('puppeteer');
-
-const url = 'https://skidrowgamereloaded.co/';
-
-let createPage = async (page, url) => {
-    await page.goto(url);
-    global.page = page;
-}
-
+const utils = require('../utils')
+const url = 'https://skidrowgamereloaded.co';
 async function getTop10Links() {
     try {
-        const browser = await puppeteer.launch();
-        const page = await browser.newPage();
-        await createPage(page, url);
-        let html = await page.content();
+        let html = await utils.axios.getHTML(url)
         const $ = cheerio.load(html);
         const links = [];
 
@@ -23,7 +13,6 @@ async function getTop10Links() {
             links.push(link);
         });
         console.log("- LINKS GOT");
-        browser.close();
         return links;
     } catch (err) {
         console.log(err);
@@ -32,10 +21,7 @@ async function getTop10Links() {
 
 async function getDataByUrl(url) {
     try {
-        const browser = await puppeteer.launch();
-        const page = await browser.newPage();
-        await createPage(page, url);
-        let html = await page.content();
+        let html = await utils.axios.getHTML(url)
         const $ = cheerio.load(html);
         let data = [];
 
@@ -43,7 +29,6 @@ async function getDataByUrl(url) {
             let content = $(this).contents().text();
             data.push(content);
         });
-        browser.close();
         return data;
     } catch (err) {
         console.log(err)
